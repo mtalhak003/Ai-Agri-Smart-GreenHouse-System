@@ -9,9 +9,9 @@ import { Button } from "@/components/ui/button";
 import { Droplets, Sun, ShieldCheck } from "lucide-react";
 
 const controls = [
-  { name: "Toggle Sprinkler", icon: Droplets, variant: "outline" },
-  { name: "Adjust Lights", icon: Sun, variant: "outline" },
-  { name: "Run Diagnostics", icon: ShieldCheck, variant: "default" },
+  { name: "Toggle Sprinkler", icon: Droplets, variant: "outline" as const },
+  { name: "Adjust Lights", icon: Sun, variant: "outline" as const },
+  { name: "Run Diagnostics", icon: ShieldCheck, variant: "default" as const },
 ];
 
 export default function ManualControls() {
@@ -27,7 +27,7 @@ export default function ManualControls() {
         {controls.map((control) => (
           <Button
             key={control.name}
-            variant={control.variant as any}
+            variant={control.variant}
             size="lg"
             className="w-full sm:w-auto flex-grow"
           >
