@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Droplets, Sun, ShieldCheck } from "lucide-react";
+import { Droplets, Sun, ShieldCheck, Wind } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 
 export default function ManualControls() {
@@ -33,6 +33,16 @@ export default function ManualControls() {
         toast({
           title: "Action Triggered",
           description: "Lights have been adjusted.",
+        }),
+    },
+    {
+      name: "Toggle Motor",
+      icon: Wind,
+      variant: "outline" as const,
+      action: () =>
+        toast({
+          title: "Action Triggered",
+          description: "Motor has been toggled.",
         }),
     },
     {
