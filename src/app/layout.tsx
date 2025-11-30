@@ -3,8 +3,8 @@ import './globals.css';
 import { Toaster } from "@/components/ui/toaster"
 
 export const metadata: Metadata = {
-  title: 'LeafPulse Dashboard',
-  description: 'Monitor your plant health with LeafPulse',
+  title: 'AI-Agri smart greenhouse system',
+  description: 'Monitor your greenhouse with AI-Agri',
 };
 
 export default function RootLayout({

@@ -27,8 +27,8 @@ const navItems = [
   { href: "#dashboard", icon: LayoutDashboard, label: "Dashboard" },
   { href: "#health", icon: BarChartBig, label: "Health" },
   { href: "#alerts", icon: AlertTriangle, label: "Alerts" },
-  { href: "#logs", icon: ListChecks, label: "Logs" },
   { href: "#controls", icon: SlidersHorizontal, label: "Controls" },
+  { href: "#logs", icon: ListChecks, label: "Logs" },
 ];
 
 export default function DashboardSidebar() {
@@ -43,7 +43,7 @@ export default function DashboardSidebar() {
             <Leaf className="h-5 w-5" />
           </div>
           <span className="font-headline text-lg font-semibold">
-            LeafPulse
+            AI-Agri
           </span>
         </div>
       </SidebarHeader>
