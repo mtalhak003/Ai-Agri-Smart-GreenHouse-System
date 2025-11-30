@@ -24,11 +24,11 @@ import { PlaceHolderImages } from "@/lib/placeholder-images";
 import { usePathname } from "next/navigation";
 
 const navItems = [
-  { href: "#", icon: LayoutDashboard, label: "Dashboard" },
-  { href: "#", icon: BarChartBig, label: "Health" },
-  { href: "#", icon: AlertTriangle, label: "Alerts" },
-  { href: "#", icon: ListChecks, label: "Logs" },
-  { href: "#", icon: SlidersHorizontal, label: "Controls" },
+  { href: "#dashboard", icon: LayoutDashboard, label: "Dashboard" },
+  { href: "#health", icon: BarChartBig, label: "Health" },
+  { href: "#alerts", icon: AlertTriangle, label: "Alerts" },
+  { href: "#logs", icon: ListChecks, label: "Logs" },
+  { href: "#controls", icon: SlidersHorizontal, label: "Controls" },
 ];
 
 export default function DashboardSidebar() {
