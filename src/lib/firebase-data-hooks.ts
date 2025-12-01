@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo } from 'react';
-import { useCollection, useFirestore, useMemoFirebase } from '@/firebase';
+import { useCollection, useFirestore, useMemoFirebase, useUser } from '@/firebase';
 import {
   collection,
   query,
@@ -36,15 +36,17 @@ export interface DeviceLog {
  */
 export function useLeafHealthData(count: number) {
   const firestore = useFirestore();
+  const { user, isUserLoading } = useUser();
 
   const leafHealthQuery = useMemoFirebase(() => {
-    if (!firestore) return null;
+    // Wait for user to be authenticated and firestore to be available
+    if (!firestore || isUserLoading || !user) return null;
     return query(
       collection(firestore, 'leaf_health_data'),
       orderBy('timestamp', 'desc'),
       limit(count)
     );
-  }, [firestore, count]);
+  }, [firestore, count, user, isUserLoading]);
 
   return useCollection<LeafHealthData>(leafHealthQuery);
 }
@@ -54,15 +56,17 @@ export function useLeafHealthData(count: number) {
  */
 export function useDeviceLogs() {
   const firestore = useFirestore();
+  const { user, isUserLoading } = useUser();
 
   const deviceLogsQuery = useMemoFirebase(() => {
-    if (!firestore) return null;
+    // Wait for user to be authenticated and firestore to be available
+    if (!firestore || isUserLoading || !user) return null;
     return query(
       collection(firestore, 'device_logs'),
       orderBy('timestamp', 'desc'),
       limit(50) // Fetch last 50 logs
     );
-  }, [firestore]);
+  }, [firestore, user, isUserLoading]);
 
   return useCollection<DeviceLog>(deviceLogsQuery);
 }
