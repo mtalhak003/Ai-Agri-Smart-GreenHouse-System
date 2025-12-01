@@ -4,36 +4,42 @@ import { generateDiseaseAlerts } from "@/ai/flows/generate-disease-alerts";
 import { getFirestore } from "firebase-admin/firestore";
 import { getApps, initializeApp, cert } from "firebase-admin/app";
 
-// Initialize Firebase Admin SDK if not already initialized
-if (!getApps().length) {
-  // Check if environment variables are available
-  if (process.env.FIREBASE_PRIVATE_KEY) {
-    initializeApp({
-      credential: cert({
-        projectId: process.env.FIREBASE_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
-      }),
-    });
-  } else {
-    // This is for local development without env vars.
-    // It uses the service account key from a local file.
-    // Ensure you have this file and it's in .gitignore
+function initializeFirebaseAdmin() {
+  // Initialize Firebase Admin SDK if not already initialized
+  if (!getApps().length) {
     try {
-      const serviceAccount = require("../../serviceAccountKey.json");
-      initializeApp({
-        credential: cert(serviceAccount),
-      });
+      // Try initializing with service account from environment variables first
+      if (process.env.FIREBASE_PRIVATE_KEY) {
+        initializeApp({
+          credential: cert({
+            projectId: process.env.FIREBASE_PROJECT_ID,
+            clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+            privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n'),
+          }),
+        });
+      } else {
+        // Fallback for local development using a service account file
+        const serviceAccount = require("../../serviceAccountKey.json");
+        initializeApp({
+          credential: cert(serviceAccount),
+        });
+      }
     } catch (e) {
-      console.error("Failed to initialize Firebase Admin SDK. Ensure serviceAccountKey.json exists for local development or environment variables are set for production.", e);
+      console.error(
+        "Failed to initialize Firebase Admin SDK. Ensure serviceAccountKey.json exists for local development or environment variables are set for production.",
+        e
+      );
+      // Re-throw or handle the error as appropriate for your application
+      throw new Error("Firebase Admin SDK initialization failed.");
     }
   }
 }
 
-const db = getFirestore();
-
 export async function getDiseaseAlert() {
   try {
+    initializeFirebaseAdmin(); // Ensure Firebase is initialized
+    const db = getFirestore();
+
     // Fetch latest leaf health data
     const healthSnapshot = await db
       .collection("leaf_health_data")
