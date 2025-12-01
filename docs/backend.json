@@ -15,9 +15,12 @@
           "description": "Reference to the IoTDevice that generated this data. (Relationship: IoTDevice 1:N LeafHealthData)"
         },
         "timestamp": {
-          "type": "string",
-          "description": "Timestamp of when the data was recorded.",
-          "format": "date-time"
+          "type": "object",
+          "properties": {
+            "seconds": { "type": "number" },
+            "nanoseconds": { "type": "number" }
+          },
+          "description": "Timestamp of when the data was recorded."
         },
         "temperature": {
           "type": "number",
@@ -26,6 +29,10 @@
         "humidity": {
           "type": "number",
           "description": "Humidity reading from the sensor."
+        },
+        "soilMoisture": {
+          "type": "number",
+          "description": "Soil moisture reading"
         },
         "lightLevel": {
           "type": "number",
@@ -42,6 +49,7 @@
         "timestamp",
         "temperature",
         "humidity",
+        "soilMoisture",
         "lightLevel",
         "healthScore"
       ]
@@ -91,9 +99,12 @@
           "description": "Reference to the IoTDevice that triggered this alert. (Relationship: IoTDevice 1:N DiseaseAlert)"
         },
         "timestamp": {
-          "type": "string",
-          "description": "Timestamp of when the alert was generated.",
-          "format": "date-time"
+          "type": "object",
+          "properties": {
+            "seconds": { "type": "number" },
+            "nanoseconds": { "type": "number" }
+          },
+          "description": "Timestamp of when the alert was generated."
         },
         "diseaseType": {
           "type": "string",
@@ -132,13 +143,16 @@
           "description": "Reference to the IoTDevice that generated this log. (Relationship: IoTDevice 1:N DeviceLog)"
         },
         "timestamp": {
-          "type": "string",
-          "description": "Timestamp of when the log was recorded.",
-          "format": "date-time"
+          "type": "object",
+          "properties": {
+            "seconds": { "type": "number" },
+            "nanoseconds": { "type": "number" }
+          },
+          "description": "Timestamp of when the log was recorded."
         },
-        "logLevel": {
+        "level": {
           "type": "string",
-          "description": "Log level (e.g., INFO, WARNING, ERROR)."
+          "description": "Log level (e.g., INFO, WARN, ERROR)."
         },
         "message": {
           "type": "string",
@@ -149,7 +163,7 @@
         "id",
         "deviceId",
         "timestamp",
-        "logLevel",
+        "level",
         "message"
       ]
     }
