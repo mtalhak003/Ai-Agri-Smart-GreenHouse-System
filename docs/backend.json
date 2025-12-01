@@ -1,0 +1,232 @@
+{
+  "entities": {
+    "LeafHealthData": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "LeafHealthData",
+      "type": "object",
+      "description": "Represents leaf health data collected from sensors.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the leaf health data entry."
+        },
+        "deviceId": {
+          "type": "string",
+          "description": "Reference to the IoTDevice that generated this data. (Relationship: IoTDevice 1:N LeafHealthData)"
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp of when the data was recorded.",
+          "format": "date-time"
+        },
+        "temperature": {
+          "type": "number",
+          "description": "Temperature reading from the sensor."
+        },
+        "humidity": {
+          "type": "number",
+          "description": "Humidity reading from the sensor."
+        },
+        "lightLevel": {
+          "type": "number",
+          "description": "Light level reading from the sensor."
+        },
+        "healthScore": {
+          "type": "number",
+          "description": "Calculated health score based on sensor data."
+        }
+      },
+      "required": [
+        "id",
+        "deviceId",
+        "timestamp",
+        "temperature",
+        "humidity",
+        "lightLevel",
+        "healthScore"
+      ]
+    },
+    "IoTDevice": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "IoTDevice",
+      "type": "object",
+      "description": "Represents an IoT device collecting leaf health data.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the IoT device."
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the IoT device."
+        },
+        "location": {
+          "type": "string",
+          "description": "Location of the IoT device."
+        },
+        "status": {
+          "type": "string",
+          "description": "Current status of the IoT device (e.g., active, inactive)."
+        }
+      },
+      "required": [
+        "id",
+        "name",
+        "location",
+        "status"
+      ]
+    },
+    "DiseaseAlert": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "DiseaseAlert",
+      "type": "object",
+      "description": "Represents a disease alert based on detected abnormalities.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the disease alert."
+        },
+        "deviceId": {
+          "type": "string",
+          "description": "Reference to the IoTDevice that triggered this alert. (Relationship: IoTDevice 1:N DiseaseAlert)"
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp of when the alert was generated.",
+          "format": "date-time"
+        },
+        "diseaseType": {
+          "type": "string",
+          "description": "Type of disease detected."
+        },
+        "severity": {
+          "type": "string",
+          "description": "Severity level of the disease."
+        },
+        "confidence": {
+          "type": "number",
+          "description": "Confidence level of the disease detection."
+        }
+      },
+      "required": [
+        "id",
+        "deviceId",
+        "timestamp",
+        "diseaseType",
+        "severity",
+        "confidence"
+      ]
+    },
+    "DeviceLog": {
+      "$schema": "http://json-schema.org/draft-07/schema#",
+      "title": "DeviceLog",
+      "type": "object",
+      "description": "Represents logs from IoT devices.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier for the device log entry."
+        },
+        "deviceId": {
+          "type": "string",
+          "description": "Reference to the IoTDevice that generated this log. (Relationship: IoTDevice 1:N DeviceLog)"
+        },
+        "timestamp": {
+          "type": "string",
+          "description": "Timestamp of when the log was recorded.",
+          "format": "date-time"
+        },
+        "logLevel": {
+          "type": "string",
+          "description": "Log level (e.g., INFO, WARNING, ERROR)."
+        },
+        "message": {
+          "type": "string",
+          "description": "Log message."
+        }
+      },
+      "required": [
+        "id",
+        "deviceId",
+        "timestamp",
+        "logLevel",
+        "message"
+      ]
+    }
+  },
+  "auth": {
+    "providers": [
+      "password",
+      "anonymous"
+    ]
+  },
+  "firestore": {
+    "structure": [
+      {
+        "path": "/leaf_health_data/{leafHealthDataId}",
+        "definition": {
+          "entityName": "LeafHealthData",
+          "schema": {
+            "$ref": "#/backend/entities/LeafHealthData"
+          },
+          "description": "Stores leaf health data collected from IoT devices. Includes denormalized 'deviceId' for efficient querying and authorization.",
+          "params": [
+            {
+              "name": "leafHealthDataId",
+              "description": "Unique identifier for the leaf health data entry."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/iot_devices/{deviceId}",
+        "definition": {
+          "entityName": "IoTDevice",
+          "schema": {
+            "$ref": "#/backend/entities/IoTDevice"
+          },
+          "description": "Stores IoT device information.",
+          "params": [
+            {
+              "name": "deviceId",
+              "description": "Unique identifier for the IoT device."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/disease_alerts/{diseaseAlertId}",
+        "definition": {
+          "entityName": "DiseaseAlert",
+          "schema": {
+            "$ref": "#/backend/entities/DiseaseAlert"
+          },
+          "description": "Stores disease alerts generated from sensor data. Includes denormalized 'deviceId' for efficient querying and authorization.",
+          "params": [
+            {
+              "name": "diseaseAlertId",
+              "description": "Unique identifier for the disease alert."
+            }
+          ]
+        }
+      },
+      {
+        "path": "/device_logs/{deviceLogId}",
+        "definition": {
+          "entityName": "DeviceLog",
+          "schema": {
+            "$ref": "#/backend/entities/DeviceLog"
+          },
+          "description": "Stores log data from IoT devices. Includes denormalized 'deviceId' for efficient querying and authorization.",
+          "params": [
+            {
+              "name": "deviceLogId",
+              "description": "Unique identifier for the device log entry."
+            }
+          ]
+        }
+      }
+    ],
+    "reasoning": "The Firestore structure is designed to optimize for real-time data display, disease alerts, and device log management as requested by the LeafPulse Dashboard application. To ensure security and scalability, we're employing denormalization and structural segregation. Specifically, all `LeafHealthData`, `DiseaseAlert`, and `DeviceLog` entries are stored under a top-level collection, with the `deviceId` field duplicated in each document. This denormalization strategy is critical for Authorization Independence, enabling performant queries and security rules without relying on parent document reads (`get()` calls). This approach will prevent issues with atomic writes and complex rule evaluations, which are challenging to debug.\n\nThe structure also facilitates QAPs by avoiding the need to filter data based on conditions in rules. All data in a collection shares the same security posture. The `IoTDevices` and associated data like `LeafHealthData`, `DiseaseAlerts`, and `DeviceLogs` are stored in separate collections, making security rules easier to write and maintain.\n\nAdditionally, given the app's focus on real-time leaf health and disease alerts, the data structure supports efficient querying and filtering based on `deviceId` and timestamps, enabling the display of real-time charts and device logs. Segregation of IoTDevice entities from the actual data allows for more efficient lookups of device metadata without needing to scan through all data entries."
+  }
+}
